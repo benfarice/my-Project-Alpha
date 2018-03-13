@@ -1,0 +1,1 @@
+EXEC sp_RENAME 'BUYER_SELLER.NAME_OR_CN' , 'name_en', 'COLUMN'
