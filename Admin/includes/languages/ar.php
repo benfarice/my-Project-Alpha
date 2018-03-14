@@ -56,7 +56,12 @@
 			'message_delete_lot_phrase_3'=>'من بيانات هذا البائع',
 			'kg'=>'كيلوغرام',
 			'update_title_para1'=>'تعديل الدفعة التي تحمل الرقم التسلسلي ',
-			'new_qte'=>'الكمية الجديدة'
+			'new_qte'=>'الكمية الجديدة',
+			'hello'=>'مرحبا',
+			'search_buyer'=>'المشتري',
+			'price'=>'ثمن البيع',
+			'reyal_homany'=>'ر.ع',
+			'total'=>'المجموع'
 		);
 		return $lang[$phrase];
 	}

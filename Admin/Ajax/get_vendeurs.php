@@ -36,7 +36,7 @@ if(isset($_REQUEST['get_espece'])){
 	//from ESPECE e where e.code_famille = ".$_REQUEST['id_family'];
 	$query_sellers = "select e.Nom_espece,e.Code_espece 
 	from ESPECE e ";
-	if(isset($_REQUEST['searched_value_espece'])){
+	if(isset($_REQUEST['searched_value_espece']) && $_REQUEST['searched_value_espece']!=""){
 		$query_sellers = "select e.Nom_espece,e.Code_espece 
 		from ESPECE e where e.Nom_An 
 		like '%".$_REQUEST['searched_value_espece']."%'
@@ -46,8 +46,31 @@ if(isset($_REQUEST['get_espece'])){
 		or e.Nom_espece like '%".$_REQUEST['searched_value_espece']."%' 
 		or e.SDESC like '%".$_REQUEST['searched_value_espece']."%' ";
 	}
+	if(isset($_REQUEST['id_family'])){
+		$query_sellers = "select e.Nom_espece,e.Code_espece 
+	    from ESPECE e where e.code_famille = ".$_REQUEST['id_family'];
+	}
 }
 //echo $query_sellers;
+
+if(isset($_REQUEST['get_data_buyer'])){
+	$query_sellers = "SELECT  ID_B_S ,name_".$_SESSION['Lang']." ,bs.LICENCE_NUMBER
+  	FROM BUYER_SELLER bs where bs.TYPE_B_S='BUYER' and bs.ENABLED = 1";
+  	if(isset($_REQUEST['searched_buyer'])){
+  		$query_sellers = "SELECT  ID_B_S ,name_".$_SESSION['Lang']." ,
+  		s.LICENCE_NUMBER  FROM BUYER_SELLER s 
+	 where s.TYPE_B_S='BUYER' and s.ENABLED = 1 and 
+	 (s.LICENCE_NUMBER 
+	like '%".$_REQUEST['searched_buyer']."%' 
+	or 
+	s.ID_B_S like '%".$_REQUEST['searched_buyer']."%' 
+	or s.name_".$_SESSION['Lang']." like '%".$_REQUEST['searched_buyer']."%' or s.name_ar 
+	like '%".$_REQUEST['searched_buyer']."%')";
+  	}
+}
+
+
+
 $params_query_sellers = array();
 $options_query_sellers =  array( "Scrollable" => SQLSRV_CURSOR_KEYSET );
 $stmt_query_sellers=sqlsrv_query($con,$query_sellers,$params_query_sellers,$options_query_sellers);
@@ -71,7 +94,26 @@ while($row_query_sellers = sqlsrv_fetch_array($stmt_query_sellers, SQLSRV_FETCH_
 	</div>
 	<?php
 
-	}else{
+	}else 
+	if(isset($_REQUEST['get_data_buyer'])){
+	?>
+	<div class="buyer_name_div text-center mySlides">
+		<p id="buyer_has_selected">
+		<?php 
+		if( $_SESSION['Lang'] == 'ar'){
+			echo $row_query_sellers['name_ar']/*.$b*/;
+		}else{
+			echo $row_query_sellers['name_en'];
+		}
+		 ?>
+		</p>
+		<p class="id_buyer none" style="/*display: none;*/"><?php echo $row_query_sellers['ID_B_S']; ?></p>
+		<p class="none"  style="/*display: none;*/"><?php echo $row_query_sellers['LICENCE_NUMBER']; ?></p>
+	</div>
+	<?php
+	}
+	else
+	{
 
 
 	

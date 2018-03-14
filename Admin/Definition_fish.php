@@ -39,7 +39,7 @@
 								    <option selected><?php //echo lang('ID.'); ?></option>
 								    <option value="2" id="option_licence_group"><?php //echo lang('licence'); ?></option>
 								    <option value="3"><?php //echo lang('name');?></option>
-								  </select>
+								  </select> 
 								-->
 							</div>
 							<div class="col-md-4 col-sm-4 col-xs-4">
@@ -389,7 +389,7 @@
 							</div>
 				<div class="col-md-2 col-sm-2 col-xs-2">
 							
-					<button class="btn btn-block btn-lg btn-warning">
+					<button class="btn btn-block btn-lg btn-warning" onclick="filter_family();">
 						<?php echo lang('family'); ?>
 					</button>		
 				</div>
@@ -862,7 +862,7 @@
 				      		
 				      	</button>
 				      	<input type="hidden" name="" id="id_lot_to_update">
-				      	<input type="hidden" id="new_qte_to_update" name="">
+				      	
 				</div>
 				<div class="col-md-6 col-sm-6 col-xs-6">
 						 <button type="button" class="btn btn-secondary btn-block btn-lg" 
@@ -878,428 +878,441 @@
 	<!-- ************************************ -->
 		<!-- ************************************************************** -->
 
-		<script type="text/javascript">
-			function confirm_delete_lot(num_lot,poids,espece_name){
-				var message = '<?php echo lang('message_delete_lot'); ?>';
-				message+= ' '+ espece_name + ' ';
-				message += '<?php echo lang('message_delete_lot_phrase_2'); ?>';
-				message+=' '+ poids +' '+'<?php echo lang('kg'); ?>';
-				message += ' '+ '<?php echo lang('message_delete_lot_phrase_3'); ?>';
-				$('#id_lot_to_delete').val(num_lot);
-				$('#confirm_delete_message_lot').html(message);
-				$('#myModal_delect_confirm').modal('show');
-			}
-			function delete_lot_func(){
-				num_lot = $('#id_lot_to_delete').val();
-				//alert(num_lot);
-				var request = "Ajax/get_lot_data.php?id_vendeur="+id_vendeur+"&del_lot_id="+num_lot;
-				xmlhttp2.onreadystatechange = function(){
-		            if(xmlhttp2.readyState == 4 && xmlhttp2.status == 200){
-		                document.getElementById('tbody_get_lot_date').innerHTML = xmlhttp2.responseText;
-		            }
-		        }
-		        xmlhttp2.open('GET',request,true);
-		        xmlhttp2.send();
-		        $('#myModal_delect_confirm').modal('hide');
-		        
-			}
-			function ajax_func_lot(){
+	<div id="dialog_family">
+		<div class="row">
 
-				Qte = $("#dialog #input_piece").html();
-				seller_selected = $('#seller_has_selected').html();
-				var add = false;
-				var request = "Ajax/get_lot_data.php?id_vendeur="+id_vendeur;
-				if(id_vendeur !=  '0' && code_espece != '0' &&  Qte != '0'){
-					var request = "Ajax/get_lot_data.php?add_lot=yes&id_vendeur="+id_vendeur+"&code_espece="+code_espece+"&qte="+Qte+"&seller="+seller_selected+"&espece="+espece;
-					add=true;
-				}
-				console.log(espece);
-				console.log(request);
-		        xmlhttp2 = new XMLHttpRequest();
-		        xmlhttp2.onreadystatechange = function(){
-		            if(xmlhttp2.readyState == 4 && xmlhttp2.status == 200){
-		                document.getElementById('tbody_get_lot_date').innerHTML = xmlhttp2.responseText;
-		                if(add == true){
-		                	var link = $('#link_to_imprim').val();
-		                	console.log('link : ajax_func-lot() : ');
-		                	console.log(link);
-							document.location.href=link;
-		                }
-		         
-		            }
-		        }
-		        xmlhttp2.open('GET',request,true);
-		        xmlhttp2.send();
-		        }
-		    function ajax_func_lot_imprim_all(){
 
-				Qte = $("#dialog #input_piece").html();
-				seller_selected = $('#seller_has_selected').html();
-				var request = "Ajax/get_lot_data.php?imprime_tout=yes&id_vendeur="+id_vendeur+"&code_espece="+code_espece+"&qte="+Qte+"&seller="+seller_selected;
-				
 
-				console.log(request);
-		        //xmlhttp2 = new XMLHttpRequest();
-		        xmlhttp2.onreadystatechange = function(){
-		            if(xmlhttp2.readyState == 4 && xmlhttp2.status == 200){
-		                document.getElementById('tbody_get_lot_date').innerHTML = xmlhttp2.responseText;
-		               
-		                var link = $('#link_to_imprim_all').val();
-		                console.log('link : ajax_func-lot() : ');
-		                console.log(link);
-						document.location.href=link;
-		             
-		         
-		            }
-		        }
-		        xmlhttp2.open('GET',request,true);
-		        xmlhttp2.send();
-		        }
-			function ajax_func_vendeur(){
-		        xmlhttp = new XMLHttpRequest();
-		        xmlhttp.onreadystatechange = function(){
-		            if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
-		                document.getElementById('get_data_vendeurs').innerHTML = xmlhttp.responseText;
-		                slider();
-		                click_slide();
-		            }
-		        }
-		        xmlhttp.open('GET','Ajax/get_vendeurs.php',true);
-		        xmlhttp.send();
-		    }
-		    function search_sellers_func(){
-		    	//xmlhttp = new XMLHttpRequest();
-		    	var searched_value = $('#searched_value').val();
+				<!--
+				<div class="col-md-4 col-sm-4 col-xs-4">
+				</div>
 
-		    	var request = 'Ajax/get_vendeurs.php?searched_value='+searched_value;
-		    	if(family_part == true){
-		    		request = 'Ajax/get_vendeurs.php?get_families=yes&id_family='+searched_value;
-		    	}
-		    	
-		    	//***********************************
-		        xmlhttp.onreadystatechange = function(){
-		            if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
-		                document.getElementById('get_data_vendeurs').innerHTML = xmlhttp.responseText;
-		                slider();
-		                click_slide();
-		                //slideIndex = 1;
-						//end_slide_index = 2;
-						$('#searched_value').val('');
-		            }
-		        }
-		        xmlhttp.open('GET',request,true);
-		        xmlhttp.send();
-		    }
-		    family_part = false;
-		    espece_part=false;
-		    function search_especes_func(){
+				<div class="col-md-4 col-sm-4 col-xs-4">
+							
+							
+				<div>
+							
+				<input type="text" class="form-control" placeholder="<?php 
+							  // echo lang('search_exemple_family_here');?>" id="searched_value_family"
+							   style="position:relative; z-index:10000">
+				</div>
+							
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+							
+				<div onclick="search_family_func();">
+											
 
-		    	var searched_value = $('#searched_value_espece').val();
-		      	request = 'Ajax/get_vendeurs.php?get_espece=yes&searched_value_espece='+searched_value;
 
-		        xmlhttp3.onreadystatechange = function(){
-		            if(xmlhttp3.readyState == 4 && xmlhttp3.status == 200){
-		                document.getElementById('get_data_espece').innerHTML = xmlhttp3.responseText;
-		                //console.log('before : '+end_slide_index);
-		                slider_espece();
-		                //console.log('after : '+end_slide_index);
-		               
-		                click_slide_e();
 
-			        }
-			    }
-		        xmlhttp3.open('GET',request,true);
-		        xmlhttp3.send();
-		    }
-		    function update_func_lot(num_lot,poids,espece,family){
-		    	//alert(num_lot);
-		    	console.log("update_func lot");
-		    	console.log(poids);
-		    	console.log(espece);
-		    	console.log(family);
-		    	var update_title = '<?php echo lang('update_title_para1'); ?>'+num_lot;
-		    	$('#update_title').html(update_title);
-		    	lot_description = '<?php echo lang('fish_type'); ?>'+" "+family;
-		    	lot_description+= " "+'<?php echo lang('the_type'); ?>'+' '+espece;
-		    	$('#lot_description').html(lot_description);
-		    	$('#new_qte').html(poids);
-		    	$('#myModal_update_lot').modal('show');
-		    }
-		    function ajax_func_espece(){
-		        xmlhttp3 = new XMLHttpRequest();
-		        //if(id_vendeur != '0'){
-		        
-		        /*
-		        var request = 'Ajax/get_vendeurs.php?get_families=yes';
-		        if(family_part == false){
-		        	 family_part=true;
-			        $('#searched_value').attr("placeholder", "<?php  //echo lang('search_exemple_family_here');?>");
-			        $('#option_licence_group').html("<?php // echo lang('option_gr_family');?>");
-			        //var searched_value = $('#searched_value').val();
-			        
-		        }else if(id_family != '0'){
-		        	espece_part=true;
-		        	 $('#searched_value').attr("placeholder", "<?php // echo lang('search_exemple_espece');?>");
-		        	request = 'Ajax/get_vendeurs.php?get_espece=yes&id_family='+id_family;
-		        }
+
+					<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="60px" height="60px"
+						 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+					<path style="fill:#B06328;" d="M512,471.273L512,471.273C512,493.382,493.382,512,471.273,512l0,0
+						c-11.636,0-22.109-4.655-30.255-12.8L310.691,357.236c-4.655-4.655-4.655-11.636,0-16.291l30.255-30.255
+						c4.655-4.655,11.636-4.655,16.291,0L499.2,442.182C507.345,449.164,512,460.8,512,471.273z"/>
+					<rect x="292.065" y="283.928" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 744.4417 308.3694)" style="fill:#B0C4D8;" width="32.581" height="48.872"/>
+					<path style="fill:#99B4CD;" d="M320,320l5.818,5.818l11.636-11.636l-34.909-34.909l-23.273,23.273L296.727,320l0,0
+						C303.709,313.018,313.018,313.018,320,320z"/>
+					<path style="fill:#C4D7E5;" d="M174.545,0C77.964,0,0,77.964,0,174.545s77.964,174.545,174.545,174.545
+						s174.545-77.964,174.545-174.545S271.127,0,174.545,0z M174.545,314.182c-76.8,0-139.636-62.836-139.636-139.636
+						S97.745,34.909,174.545,34.909s139.636,62.836,139.636,139.636S251.345,314.182,174.545,314.182z"/>
+					<circle style="fill:#70B7E5;" cx="174.545" cy="174.545" r="139.636"/>
+					<path style="fill:#92C5EB;" d="M105.891,190.836c5.818-44.218,40.727-79.127,84.945-84.945H192
+						c19.782-2.327,20.945-30.255,2.327-33.745c-11.636-2.327-23.273-2.327-34.909-1.164c-45.382,6.982-81.455,43.055-87.273,87.273
+						c-2.327,11.636-1.164,24.436,1.164,34.909c3.491,19.782,31.418,17.455,33.745-2.327C105.891,192,105.891,190.836,105.891,190.836z"
+						/>
+					<path style="fill:#4C9CD6;" d="M46.545,186.182c0-76.8,62.836-139.636,139.636-139.636c36.073,0,67.491,13.964,93.091,34.909
+						c-25.6-29.091-62.836-46.545-104.727-46.545c-76.8,0-139.636,62.836-139.636,139.636c0,41.891,18.618,79.127,46.545,104.727
+						C60.509,253.673,46.545,222.255,46.545,186.182z"/>
+					<path style="fill:#B0C9DB;" d="M174.545,349.091L174.545,349.091c96.582,0,174.545-77.964,174.545-174.545l0,0
+						c-5.818,0-11.636,4.655-11.636,11.636c-2.327,39.564-19.782,75.636-46.545,102.4c-26.764,27.927-64,45.382-104.727,48.873
+						C179.2,337.455,174.545,343.273,174.545,349.091z"/>
+					<path style="fill:#E2E7F0;" d="M174.545,0L174.545,0C77.964,0,0,77.964,0,174.545l0,0c5.818,0,11.636-4.655,11.636-11.636
+						C13.964,124.509,30.255,89.6,54.691,64c27.927-29.091,66.327-48.873,108.218-52.364C169.891,11.636,174.545,5.818,174.545,0z"/>
+					<path style="fill:#A35425;" d="M498.036,441.018l-6.982-5.818c5.818,6.982,9.309,16.291,9.309,25.6l0,0
+						c0,15.127-18.618,20.945-29.091,10.473L349.091,349.091c-6.982-6.982-17.455-6.982-24.436,0l-11.636,11.636l126.836,136.145
+						c6.982,6.982,16.291,12.8,25.6,13.964c12.8,1.164,25.6-3.491,33.745-11.636c8.145-8.145,12.8-20.945,11.636-33.745
+						C510.836,456.145,505.018,448,498.036,441.018z"/>
+					<path style="fill:#C97629;" d="M378.182,360.727c-1.164,0-3.491,0-4.655-1.164l-29.091-29.091c-2.327-2.327-2.327-5.818,0-8.145
+						c2.327-2.327,5.818-2.327,8.145,0l29.091,29.091c2.327,2.327,2.327,5.818,0,8.145C381.673,360.727,379.345,360.727,378.182,360.727z
+						"/>
+
+					</svg>
+				</div>
+			</div>
+			-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+  		<div id="get_data_family" class="col-md-12 col-sm-12 col-xs-12">
+  			
+  		</div>
+
+							<div class="col-md-1 col-sm-1 col-xs-1 text-right search_bar border-raduis-bar"   onclick="plusDivs_family();">
+								<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50px" height="50px" 
+							 viewBox="0 0 54 54" style="enable-background:new 0 0 54 54;" xml:space="preserve">
+
+								<path style="fill:#4FBA6F;" d="M27,53L27,53C12.641,53,1,41.359,1,27v0C1,12.641,12.641,1,27,1h0c14.359,0,26,11.641,26,26v0
+									C53,41.359,41.359,53,27,53z"/>
+								<path style="fill:#4FBA6F;" d="M27,54C12.112,54,0,41.888,0,27S12.112,0,27,0s27,12.112,27,27S41.888,54,27,54z M27,2
+									C13.215,2,2,13.215,2,27s11.215,25,25,25s25-11.215,25-25S40.785,2,27,2z"/>
+
+							    <path style="fill:#FFFFFF;" d="M22.294,40c-0.256,0-0.512-0.098-0.707-0.293c-0.391-0.391-0.391-1.023,0-1.414L32.88,27
+								L21.587,15.707c-0.391-0.391-0.391-1.023,0-1.414s1.023-0.391,1.414,0l11.498,11.498c0.667,0.667,0.667,1.751,0,2.418
+								L23.001,39.707C22.806,39.902,22.55,40,22.294,40z"/>
+
+						        </svg>
+							</div>
+							<div class="col-md-3 col-sm-3 col-xs-3"></div>
+							<div class="col-md-4 col-sm-4 col-xs-4">
+								 <button type="button" class="btn btn-secondary btn-block btn-lg" 
+								 onclick="func_close_dialog_family();" >
+						        	<?php echo lang('Close'); ?>
+						        	
+						        </button>
+							</div>
+							<div class="col-md-3 col-sm-3 col-xs-3"></div>
+							<div class="col-md-1 col-sm-1 col-xs-1 text-left search_bar border-raduis-bar" 
+							 onclick="plusDivs_family();">
+								   <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                 viewBox="0 0 54 54" style="enable-background:new 0 0 54 54;" xml:space="preserve" width="50px" height="50px">
+
+                                    <path style="fill:#4FBA6F;" d="M27,1L27,1c14.359,0,26,11.641,26,26v0c0,14.359-11.641,26-26,26h0C12.641,53,1,41.359,1,27v0
+                                        C1,12.641,12.641,1,27,1z"/>
+                                    <path style="fill:#4FBA6F;" d="M27,54C12.112,54,0,41.888,0,27S12.112,0,27,0s27,12.112,27,27S41.888,54,27,54z M27,2
+                                        C13.215,2,2,13.215,2,27s11.215,25,25,25s25-11.215,25-25S40.785,2,27,2z"/>
+
+                                <path style="fill:#FFFFFF;" d="M31.706,40c-0.256,0-0.512-0.098-0.707-0.293L19.501,28.209c-0.667-0.667-0.667-1.751,0-2.418
+                                    l11.498-11.498c0.391-0.391,1.023-0.391,1.414,0s0.391,1.023,0,1.414L21.12,27l11.293,11.293c0.391,0.391,0.391,1.023,0,1.414
+                                    C32.218,39.902,31.962,40,31.706,40z"/>
+
+                            </svg>
+							</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+		<div class="modal fade" id="Buyers_modal"  data-backdrop="static"
+   		data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
 		       
-		        if(id_vendeur != '0')
-		        */
-		        //var request = 'Ajax/get_vendeurs.php?get_families=yes&id_family='+searched_value;
-		      
-		      	request = 'Ajax/get_vendeurs.php?get_espece=yes';
-
-		        xmlhttp3.onreadystatechange = function(){
-		            if(xmlhttp3.readyState == 4 && xmlhttp3.status == 200){
-		                document.getElementById('get_data_espece').innerHTML = xmlhttp3.responseText;
-		                console.log('before : '+end_slide_index);
-		                slider_espece();
-		                console.log('after : '+end_slide_index);
-		                /*
-		                if(espece_part == false){
-		                	click_slide_f();
-		                }else if(espece_part == true){
-		                	
-		                }
-		                */
-		                click_slide_e();
-
-		          //  }
-		        }
-		    }
-		        xmlhttp3.open('GET',request,true);
-		        xmlhttp3.send();
-		       // }
-		     
-		    }
-			 window.onload = function(){
-			 	ajax_func_vendeur();
-			 
-			 	ajax_func_espece();
-			 }
-			
-			slideIndex = 0;
-			end_slide_index = 11;
-			slideIndex_e = 0;
-			end_slide_index_e = 11;
-			function slider(){
-				//slideIndex = 0;
-				//end_slide_index = 11;
-				showDivs(slideIndex);
-
-			
-			}
-			function slider_espece(){
-				//slideIndex_e = 0;
-				//end_slide_index_e = 11;
-				showDivs_espece(slideIndex_e);
-
-			
-			}
-			//mySlides_espece
-			//mySlides_f
-			function plusDivs(n) {
-					//end_slide_index=slideIndex+11;
-					console.log('slideindex plus div before'+slideIndex);
-					/*if(n==-1 && slideIndex>11) slideIndex = slideIndex - 11;
-					else */
-					slideIndex += 11;
-					console.log('n : ' +n);
-					
-					//end_slide_index=slideIndex+11;
-				    showDivs(slideIndex);
-				   
-				}
-			function plusDivs_espece(n) {
-					//end_slide_index_e=slideIndex_e+11;
-				    //showDivs_espece(slideIndex_e += n + end_slide_index_e);
-				    slideIndex_e+=11;
-				    showDivs_espece(slideIndex_e);
-				   
-				}
-			function change_title_to_family(){
-				if(id_vendeur != '0'){
+            	<div class="col-md-4 col-sm-4 col-xs-4">
+				</div>
+							<div class="col-md-4 col-sm-4 col-xs-4">
 				
-				if(espece_part == true){
-				$('#h1_choose_title').html('<?php echo lang("h1_choose_espece"); ?>');	
-				}else{
-				$('#h1_choose_title').html('<?php echo lang("h1_choose_family"); ?>');
-				}
-				}
-			}
-			function showDivs(n) {
-				    var i;
-				    var x = document.getElementsByClassName("mySlides");
-				    //slideIndex = n;
-				    console.log('n show divs : '+n);
-				    console.log('end slide show divs before : '+end_slide_index);
-				    console.log('slide : '+slideIndex);
-				    if ((end_slide_index+11) > x.length && (end_slide_index!=x.length-1)) {
-				    	//slideIndex = slideIndex - 11;
-				    	end_slide_index=x.length-1;
-				    	console.log('here');
-				    } else if(end_slide_index==x.length-1){
-				    	slideIndex=0;
-				    	end_slide_index=11;
-				    } 
+							<div class="input-group input-group-lg">
+							
+							  <input type="text" class="form-control" placeholder="<?php 
+							   echo lang('search_buyer');?>" aria-label="Large" aria-describedby="inputGroup-sizing-sm" id="searched_value_buyer">
+							</div>
+							
+							</div>
+							<div class="col-md-2 col-sm-2 col-xs-2">
+								<!--<br>-->
+								<div onclick="search_buyerss_func();">
+															
 
-				    else if (n < 0) 
-				    {
-				    	slideIndex = x.length;
-				    	end_slide_index=slideIndex+11;
-					}
-				     else{
-				    	end_slide_index=slideIndex+11;
-				    }
-				 
+			<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="60px" height="60px"
+						 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+					<path style="fill:#B06328;" d="M512,471.273L512,471.273C512,493.382,493.382,512,471.273,512l0,0
+						c-11.636,0-22.109-4.655-30.255-12.8L310.691,357.236c-4.655-4.655-4.655-11.636,0-16.291l30.255-30.255
+						c4.655-4.655,11.636-4.655,16.291,0L499.2,442.182C507.345,449.164,512,460.8,512,471.273z"/>
+					<rect x="292.065" y="283.928" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 744.4417 308.3694)" style="fill:#B0C4D8;" width="32.581" height="48.872"/>
+					<path style="fill:#99B4CD;" d="M320,320l5.818,5.818l11.636-11.636l-34.909-34.909l-23.273,23.273L296.727,320l0,0
+						C303.709,313.018,313.018,313.018,320,320z"/>
+					<path style="fill:#C4D7E5;" d="M174.545,0C77.964,0,0,77.964,0,174.545s77.964,174.545,174.545,174.545
+						s174.545-77.964,174.545-174.545S271.127,0,174.545,0z M174.545,314.182c-76.8,0-139.636-62.836-139.636-139.636
+						S97.745,34.909,174.545,34.909s139.636,62.836,139.636,139.636S251.345,314.182,174.545,314.182z"/>
+					<circle style="fill:#70B7E5;" cx="174.545" cy="174.545" r="139.636"/>
+					<path style="fill:#92C5EB;" d="M105.891,190.836c5.818-44.218,40.727-79.127,84.945-84.945H192
+						c19.782-2.327,20.945-30.255,2.327-33.745c-11.636-2.327-23.273-2.327-34.909-1.164c-45.382,6.982-81.455,43.055-87.273,87.273
+						c-2.327,11.636-1.164,24.436,1.164,34.909c3.491,19.782,31.418,17.455,33.745-2.327C105.891,192,105.891,190.836,105.891,190.836z"
+						/>
+					<path style="fill:#4C9CD6;" d="M46.545,186.182c0-76.8,62.836-139.636,139.636-139.636c36.073,0,67.491,13.964,93.091,34.909
+						c-25.6-29.091-62.836-46.545-104.727-46.545c-76.8,0-139.636,62.836-139.636,139.636c0,41.891,18.618,79.127,46.545,104.727
+						C60.509,253.673,46.545,222.255,46.545,186.182z"/>
+					<path style="fill:#B0C9DB;" d="M174.545,349.091L174.545,349.091c96.582,0,174.545-77.964,174.545-174.545l0,0
+						c-5.818,0-11.636,4.655-11.636,11.636c-2.327,39.564-19.782,75.636-46.545,102.4c-26.764,27.927-64,45.382-104.727,48.873
+						C179.2,337.455,174.545,343.273,174.545,349.091z"/>
+					<path style="fill:#E2E7F0;" d="M174.545,0L174.545,0C77.964,0,0,77.964,0,174.545l0,0c5.818,0,11.636-4.655,11.636-11.636
+						C13.964,124.509,30.255,89.6,54.691,64c27.927-29.091,66.327-48.873,108.218-52.364C169.891,11.636,174.545,5.818,174.545,0z"/>
+					<path style="fill:#A35425;" d="M498.036,441.018l-6.982-5.818c5.818,6.982,9.309,16.291,9.309,25.6l0,0
+						c0,15.127-18.618,20.945-29.091,10.473L349.091,349.091c-6.982-6.982-17.455-6.982-24.436,0l-11.636,11.636l126.836,136.145
+						c6.982,6.982,16.291,12.8,25.6,13.964c12.8,1.164,25.6-3.491,33.745-11.636c8.145-8.145,12.8-20.945,11.636-33.745
+						C510.836,456.145,505.018,448,498.036,441.018z"/>
+					<path style="fill:#C97629;" d="M378.182,360.727c-1.164,0-3.491,0-4.655-1.164l-29.091-29.091c-2.327-2.327-2.327-5.818,0-8.145
+						c2.327-2.327,5.818-2.327,8.145,0l29.091,29.091c2.327,2.327,2.327,5.818,0,8.145C381.673,360.727,379.345,360.727,378.182,360.727z
+						"/>
+
+					</svg>
+
+							</div>
+							</div>
+				<div class="col-md-2 col-sm-2 col-xs-2">
 					
-					console.log('slideindex :'+slideIndex);
-					console.log('end :'+end_slide_index);
+				</div>
+						
 
-				    for (i = 0; i < x.length; i++) {
-				    	if(!(i>= slideIndex && i<= end_slide_index))
-				    	x[i].style.display = "none";
-				    	else 
-				    	x[i].style.display = "block";	
-				    }
-				    /*console.log(x.length);
-				    x[slideIndex-1].style.display = "block"; 
-				    if (n > 2){
-				    	x[slideIndex].style.display = "block";
-				    	x[slideIndex+1].style.display = "block";
-				    }else if(n==2){
-				    	x[slideIndex].style.display = "block";
-				  	}*/
-				    }
-				function showDivs_espece(n) {
-				    var i;
-				    var x = document.getElementsByClassName("mySlides_espece");
+    
+		      </div>
+		      <div class="modal-body">
+		      	<div class="row">
+		      	<div class="col-md-12 col-sm-12 col-xs-12" id="get_data_buyer">
+		      		
+		      	</div>
+		      	
+							<div class="col-md-1 col-sm-1 col-xs-1 text-right search_bar border-raduis-bar">
+								<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50px" height="50px" onclick="plusDivs_espece(1)"
+							 viewBox="0 0 54 54" style="enable-background:new 0 0 54 54;" xml:space="preserve">
+
+								<path style="fill:#4FBA6F;" d="M27,53L27,53C12.641,53,1,41.359,1,27v0C1,12.641,12.641,1,27,1h0c14.359,0,26,11.641,26,26v0
+									C53,41.359,41.359,53,27,53z"/>
+								<path style="fill:#4FBA6F;" d="M27,54C12.112,54,0,41.888,0,27S12.112,0,27,0s27,12.112,27,27S41.888,54,27,54z M27,2
+									C13.215,2,2,13.215,2,27s11.215,25,25,25s25-11.215,25-25S40.785,2,27,2z"/>
+
+							    <path style="fill:#FFFFFF;" d="M22.294,40c-0.256,0-0.512-0.098-0.707-0.293c-0.391-0.391-0.391-1.023,0-1.414L32.88,27
+								L21.587,15.707c-0.391-0.391-0.391-1.023,0-1.414s1.023-0.391,1.414,0l11.498,11.498c0.667,0.667,0.667,1.751,0,2.418
+								L23.001,39.707C22.806,39.902,22.55,40,22.294,40z"/>
+
+						        </svg>
+							</div>
+							<div class="col-md-3 col-sm-3 col-xs-3"></div>
+							<div class="col-md-4 col-sm-4 col-xs-4">
+								 <button type="button" class="btn btn-secondary btn-block btn-lg" data-dismiss="modal">
+						        	<?php echo lang('Close'); ?>
+						        	
+						        </button>
+							</div>
+							<div class="col-md-3 col-sm-3 col-xs-3"></div>
+							<div class="col-md-1 col-sm-1 col-xs-1 text-left search_bar border-raduis-bar">
+								
+
+						       <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                 viewBox="0 0 54 54" style="enable-background:new 0 0 54 54;" xml:space="preserve" width="50px" height="50px" onclick="plusDivs_espece(-1)">
+
+                                    <path style="fill:#4FBA6F;" d="M27,1L27,1c14.359,0,26,11.641,26,26v0c0,14.359-11.641,26-26,26h0C12.641,53,1,41.359,1,27v0
+                                        C1,12.641,12.641,1,27,1z"/>
+                                    <path style="fill:#4FBA6F;" d="M27,54C12.112,54,0,41.888,0,27S12.112,0,27,0s27,12.112,27,27S41.888,54,27,54z M27,2
+                                        C13.215,2,2,13.215,2,27s11.215,25,25,25s25-11.215,25-25S40.785,2,27,2z"/>
+
+                                <path style="fill:#FFFFFF;" d="M31.706,40c-0.256,0-0.512-0.098-0.707-0.293L19.501,28.209c-0.667-0.667-0.667-1.751,0-2.418
+                                    l11.498-11.498c0.391-0.391,1.023-0.391,1.414,0s0.391,1.023,0,1.414L21.12,27l11.293,11.293c0.391,0.391,0.391,1.023,0,1.414
+                                    C32.218,39.902,31.962,40,31.706,40z"/>
+
+                            </svg>
+							</div>
+
+							</div>
+							
+				
+		      </div>
+		     
+		    </div>
+		  </div>
+		</div>
+		
+		
 
 
 
 
- 					if ((end_slide_index_e+11) > x.length && (end_slide_index_e!=x.length-1)) {
- 						end_slide_index_e=x.length-1;
- 					 } else if(end_slide_index_e==x.length-1){
-				    	slideIndex_e=0;
-				    	end_slide_index_e=11;
-				    } 
 
-				     else if (n < 0) 
-				    {
-				    	slideIndex_e = x.length;
-				    	end_slide_index_e=slideIndex_e+11;
-					}
-				     else{
-				    	end_slide_index_e=slideIndex_e+11;
-				    }
+<div class="modal fade text-right" id="Modal_buy_process">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        
+        <div class="row">
+        	<div class="col-md-6 col-sm-6 col-xs-6">
+        		<p><?php echo lang('lot_id'); ?> : <span id="lot_to_buy_span"></span></p>
+        		<p><?php echo lang('search_exemple_here'); ?> : <span id="seller_to_buy_span"></span></p>
+        		<p><?php echo lang('search_buyer'); ?> : <span id="buyer_to_buy_span"></span></p>
+        		<p><?php echo lang('the_type'); ?> : <span id="type_buy_span"></span></p>
+        		<p>
+        			<?php echo lang('poids'); ?> : <span id="poids_buy_span"></span> kg</p>
+        		
+        		
+        	</div>
+        	<div class="col-md-6 col-sm-6 col-xs-6">
+        		    <div class="row" >
+	        			<div class="col-md-4 col-sm-4 col-xs-4">
+	        				<button id="number1" 
+	        				class="btn btn-primary btn-block btn-lg">1</button>
+	        			</div>
+	        			<div class="col-md-4 col-sm-4 col-xs-4">
+	        				<button  id="number2" 
+	        				class="btn btn-primary btn-block btn-lg">2</button>
+	        			</div>
+	        			<div class="col-4">
+	        				<button id="number3"
+	        				class="btn btn-primary btn-block btn-lg">3</button>
+	        			</div>
+	        		</div>
+	        	
+	        		<div class="row">
+	        			<div class="col-md-4 col-sm-4 col-xs-4">
+	        				<button id="number4"
+	        				class="btn btn-primary btn-block btn-lg">4</button>
+	        			</div>
+	        			<div class="col-md-4 col-sm-4 col-xs-4">
+	        				<button id="number5"
+	        				class="btn btn-primary btn-block btn-lg">5</button>
+	        			</div>
+	        			<div class="col-md-4 col-sm-4 col-xs-4">
+	        				<button id="number6"
+	        				class="btn btn-primary btn-block btn-lg">6</button>
+	        			</div>
+	        		</div>
+	        	
+	        		<div class="row">
+	        			<div class="col-md-4 col-sm-4 col-xs-4">
+	        				<button id="number7"
+	        				class="btn btn-primary btn-block btn-lg">7</button>
+	        			</div>
+	        			<div class="col-md-4 col-sm-4 col-xs-4">
+	        				<button id="number8"
+	        				class="btn btn-primary btn-block btn-lg">8</button>
+	        			</div>
+	        			<div class="col-md-4 col-sm-4 col-xs-4">
+	        				<button id="number9"
+	        				class="btn btn-primary btn-block btn-lg">9</button>
+	        			</div>
+	        		</div>
+	        
+	        		<div class="row">
+	        			<div class="col-md-4 col-sm-4 col-xs-4">
+	        				<button id="number_v"
+	        				class="btn btn-primary btn-block btn-lg">,</button>
+	        			</div>
+	        			<div class="col-md-4 col-sm-4 col-xs-4">
+	        				<button id="number0"
+	        				class="btn btn-primary btn-block btn-lg">0</button>
+	        			</div>
+	        			<div class="col-md-4 col-sm-4 col-xs-4">
+	        				<button id="numberx"
+	        				class="btn btn-primary btn-block btn-lg">&times;</button>
+	        			</div>
+	        		</div>
+	    			
+        	</div>
+        	
+        </div>
+        <div class="row">
+	    	<div class="col-md-6 col-sm-6 col-xs-6">
+	    		<p class="font-bigger">
+        			<?php echo lang('price'); ?> : <span id="price_buy_span">1.000</span>
+		        			<?php echo lang('reyal_homany'); ?>
+		        </p>
+		    </div>
+		    <div class="col-md-6 col-sm-6 col-xs-6">
+		        <p class="font-bigger">
+		        			<?php echo lang('total');?> : <span id="total_to_buy_span">1.000</span>
+		        			<?php echo lang('reyal_homany'); ?>
+		        </p>	
+		        		
+		    </div>
+	    </div>
+      </div>
+      <div class="modal-footer">
+      	
+        	<div class="col-md-6 col-sm-6 col-xs-6">
+        		
+		         <button type="button" class="btn btn-primary btn-block" onclick="add_ADJUDICATION_buy();">
+			        	<?php echo lang('ok'); ?>
+			     </button>
+       		</div>
+        	<div class="col-md-6 col-sm-6 col-xs-6">
+	        		<button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">
+			        	<?php echo lang('Close'); ?>	
+			        </button>
+        	</div>
+     
+      </div>
+    </div>
+  </div>
+</div>
 
-				     for (i = 0; i < x.length; i++) {
-				    	if(!(i>= slideIndex_e && i<= end_slide_index_e))
-				    	x[i].style.display = "none";
-				    	else 
-				    	x[i].style.display = "block";	
-				    }
-					/*
-				    if (n > x.length) {slideIndex_e = 0} 
-				    
-				    if (n < 0) {slideIndex_e = x.length} ;
-					end_slide_index_e=slideIndex_e+11;
-				    for (i = 0; i < x.length; i++) {
-				    	if(!(i>= slideIndex_e && i<= end_slide_index_e))
-				    	x[i].style.display = "none";
-				    	else 
-				    	x[i].style.display = "block";	
-				    }
-				    /*console.log(x.length);
-				    x[slideIndex-1].style.display = "block"; 
-				    if (n > 2){
-				    	x[slideIndex].style.display = "block";
-				    	x[slideIndex+1].style.display = "block";
-				    }else if(n==2){
-				    	x[slideIndex].style.display = "block";
-				  	}*/
-				    }
-				function click_slide(){
-					$('.mySlides').click(function(){
-					id_vendeur = $(this).find('.id_seller').html();
-					vendeur_selected = $(this).html();
-					$('.mySlides').css('border', 'solid 5px #fff');
-					$(this).css('border', 'solid 5px #d35400');
-					
-					$('#seller_selected').html(vendeur_selected);
-					$('#seller_selected_d').html(vendeur_selected);
-					ajax_func_lot();
-					$('#search_vendeur').hide();
-					$('#input_poids').show();
-					//***************
-					//ajax_func_family();
-					//change_title_to_family();
-					//$('#searched_value').attr("placeholder","<?php //echo lang('search_exemple_espece');?>");
-					//$('#option_licence_group').html("<?php //echo lang('option_gr_family');?>");
-					//espece_part=true;
-					//******************
 
-					//alert(id);
-					});
-				}
-				function select_another_seller(){
-					id_vendeur = '0';
-					id_family = '0';
-					code_espece = '0';
-					Qte = '0';
-					ajax_func_vendeur();
-					$('#input_poids').hide();
-					$('#search_vendeur').show();
-				}
-				function click_slide_f(){
-					$('.mySlides').click(function(){
-					id_family = $(this).find('.id_family').html();
-					$('.mySlides').css('border', 'solid 5px #fff');
-					$(this).css('border', 'solid 5px #d35400');
-					//alert(id);
-					});
-				}
-				function click_slide_e(){
-					$('.mySlides_espece').click(function(){
-					code_espece = $(this).find('.Code_espece').html();
-					espece = $(this).find('.titre_espece').html();
-					$('.mySlides_espece').css('border', 'solid 5px #fff');
-					$(this).css('border', 'solid 5px #d35400');
-					$('#the_type_fish_selected').html(espece);
-					$("#dialog #input_piece").html('00.000');
-					$('#dialog').dialog('open');
 
-					//alert(code_espece);
-					});
-				}
 
-			id_vendeur = '0';
-			id_family = '0';
-			code_espece = '0';
-			Qte = '0';
-			espece = '0';
-			//***************************************
-			/*
-			function Afficher_txt_lot(num_lot){
-				//alert(id_facture);
-				xmlhttp_txt = new XMLHttpRequest();
-				var request = 'Ajax/ajax_txt_lot.php?num_lot='+num_lot;
-				console.log(request);
-				xmlhttp_txt.open('GET',request, true);
-				console.log("func afficher txt lot");
-				xmlhttp_txt.onreadystatechange = function (){
-							if(xmlhttp_txt.readyState == 4 && xmlhttp_txt.status == 200){
-								var filename = xmlhttp_txt.responseText;
-								document.location.href=filename;
-								console.log("response text afficher txt lot");
-								console.log(xmlhttp_txt.responseText);
-							}
-						} 
-				xmlhttp_txt.send();
-			}
-			*/
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		<script type="text/javascript">
+		function confirm_delete_lot(num_lot,poids,espece_name){
+        var message = '<?php echo lang('message_delete_lot'); ?>';
+        message+= ' '+ espece_name + ' ';
+        message += '<?php echo lang('message_delete_lot_phrase_2'); ?>';
+        message+=' '+ poids +' '+'<?php echo lang('kg'); ?>';
+        message += ' '+ '<?php echo lang('message_delete_lot_phrase_3'); ?>';
+        $('#id_lot_to_delete').val(num_lot);
+        $('#confirm_delete_message_lot').html(message);
+        $('#myModal_delect_confirm').modal('show');
+     	 }
+     	  function update_func_lot(num_lot,poids,espece,family){
+          //alert(num_lot);
+          console.log("update_func lot");
+          console.log(poids);
+          console.log(espece);
+          console.log(family);
+          var update_title = '<?php echo lang('update_title_para1'); ?>'+num_lot;
+          $('#update_title').html(update_title);
+          lot_description = '<?php echo lang('fish_type'); ?>'+" "+family;
+          lot_description+= " "+'<?php echo lang('the_type'); ?>'+' '+espece;
+          $('#id_lot_to_update').val(num_lot);
+          $('#lot_description').html(lot_description);
+          $('#new_qte').html(poids);
+          new_qte ="0";
+          $('#myModal_update_lot').modal('show');
+        }
 			//**************************************
 		</script>
 		<?php

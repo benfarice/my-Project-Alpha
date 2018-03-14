@@ -52,7 +52,19 @@
 	border-radius: 0;
 }
 
+.categories_buttons{
+	height: 150px;
+	width: 100%;
+	font-size: 40px;
+	letter-spacing: 0.1px;
+}
 
+#h2_initial_menu{
+	font-size: 40px;
+	line-height: 40px;
+	letter-spacing: 3px;
+	color: #2980b9;
+}
 /* End bootstrap Edit */
 /******************************************************************************
 								dashboard.php
@@ -90,7 +102,7 @@
 	border-radius: 50px;
 }
 
-.vendeur_name_div,.family_name_div{
+.vendeur_name_div,.family_name_div,.buyer_name_div{
 	height: 120px;
 	width: 190px;
 
@@ -105,7 +117,7 @@
 	margin: 7px;
 	padding-top: 25px;
 }
-.vendeur_name_div{
+.vendeur_name_div,.buyer_name_div{
 	height: 230px;
 	width: 190px;
 }
@@ -115,8 +127,12 @@
 
 
 }
-#get_data_espece{
-	height: 420px;
+#get_data_espece,#get_data_buyer{
+	height: 400px;
+	overflow: hidden;
+}
+#get_data_buyer{
+	height: 300px;
 }
 #slider_vendeurs_names{
 	overflow: hidden;
@@ -127,14 +143,27 @@
 .inner-background svg{
 	cursor: pointer;
 }
-#Espece_modal .modal-lg,#myModal_delect_confirm .modal-lg,#myModal_update_lot .modal-lg{
+#Espece_modal .modal-lg,
+#myModal_delect_confirm .modal-lg,
+#myModal_update_lot .modal-lg,
+#Buyers_modal .modal-lg,
+#Modal_buy_process .modal-lg
+{
     max-width: 1500px;
 }
-#Espece_modal .modal-dialog,#myModal_delect_confirm .modal-dialog,#myModal_update_lot .modal-dialog{
+#Espece_modal .modal-dialog,
+#myModal_delect_confirm .modal-dialog,
+#myModal_update_lot .modal-dialog,
+#Buyers_modal .modal-dialog,
+#Modal_buy_process .modal-dialog{
    
     width: 850px;
 }
-#Espece_modal .modal-ku ,#myModal_delect_confirm .modal-ku,#myModal_update_lot .modal-ku{
+#Espece_modal .modal-ku ,
+#myModal_delect_confirm .modal-ku,
+#myModal_update_lot .modal-ku,
+#Buyers_modal .modal-ku,
+#Modal_buy_process .modal-ku{
   width: 850px;
   margin: auto;
 }
@@ -196,10 +225,21 @@
 #myModal_update_lot #lot_description,
 #myModal_update_lot #new_qte,
 #myModal_update_lot #qte_type,
-#myModal_update_lot #new_qte_label{
+#myModal_update_lot #new_qte_label,
+#Modal_buy_process p,#Modal_buy_process span{
 	color: #2c3e50;
 	letter-spacing: 0.5px;
 	font-size: 30px;
+}
+#Modal_buy_process button{
+	font-size: 30px;
+}
+#Modal_buy_process .modal-body button{
+	margin: 5px;
+}
+#Modal_buy_process p {
+    margin-top: 0;
+    margin-bottom: 5px;
 }
 #myModal_update_lot #new_qte,#myModal_update_lot #qte_type{
 	font-size: 50px;
@@ -219,4 +259,7 @@
 }
 .ui-dialog .ui-dialog-buttonpane button {
     margin: .2em .1em .2em 0;
+}
+#Modal_buy_process p.font-bigger,#Modal_buy_process p.font-bigger span{
+	font-size: 36px;
 }

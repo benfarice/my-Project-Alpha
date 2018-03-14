@@ -15,6 +15,17 @@ if(isset($_REQUEST['del_lot_id'])){
 $num_lot_to_imprime_txt = 'L000000';
 $total_lot_for_print = 0;
 $count_lot_for_print = 0;
+
+
+if(isset($_REQUEST['new_qte'])){
+	$query_update = "update LOT set Poids_net = ".$_REQUEST['new_qte']." where 
+	Num_lot = '".$_REQUEST['up_lot_id']."' and Code_vendeur = '".$_REQUEST['id_vendeur']."'";
+	$result_update = sqlsrv_query($con,$query_update) or die(sqlsrv_errors());
+
+}
+
+
+
 if(isset($_REQUEST['add_lot'])){
 	$query_num_lot = "select count(Num_lot) as nombre from LOT";
 	$num_lot = 'L000000';
@@ -62,7 +73,11 @@ $params_query_select = array();
 	if($ntRes_select < 1){
 	?>
 	<div class="alert alert-danger" role="alert">
-	 <?php echo lang('without_data');  ?>
+	 <?php echo lang('without_data');
+	 $details_lot_txt.="----------------------------------------------".PHP_EOL;
+	 $details_lot_txt .= lang('without_data').PHP_EOL;
+	 $details_lot_txt.="----------------------------------------------".PHP_EOL;
+	   ?>
 	</div>
 	 <?php 
 	  for($x=0;$x<5;$x++){
@@ -155,10 +170,12 @@ $params_query_select = array();
 						      echo $nombre_format_francais; 
 						      $details_lot_txt .= $nombre_format_francais." ".lang('kg').PHP_EOL;
 						      ?>
-						      	
+						      	 
 						      </td>
 						       <td>
-						       	<button class="btn btn-block btn-lg btn-success">
+						       	<button class="btn btn-block btn-lg btn-success" 
+						       	onclick="buy_func_lot('<?php echo $reader_query_select["Num_lot"] ?>','<?php echo $reader_query_select["Poids_net"] ?>','<?php 
+						       echo $nom_espece ?>')">
 						       		<?php echo lang('buy_operation'); ?>
 						       	</button>
 						       </td>
@@ -185,10 +202,12 @@ if(isset($_REQUEST['add_lot'])){
 	$Date=date_create(date("Y-m-d  H:i"));
 	$enteteFile.="البائع : ".strtoupper($_REQUEST['seller']).PHP_EOL ;
 	$enteteFile.="التاريخ و الساعة : ".date_format($Date, 'd/m/Y H:i').PHP_EOL;
-	$enteteFile.= lang('lot_id')." ".$num_lot_to_imprime_txt.PHP_EOL;
-	$enteteFile.=$_REQUEST['espece'].PHP_EOL;
+	//$enteteFile.= lang('lot_id')." ".$num_lot_to_imprime_txt.PHP_EOL;
 	$qte = number_format($_REQUEST['qte'], 3, ',', ' ');
-	$enteteFile.=$qte." ".lang('kg').PHP_EOL;
+	//$arr = array(,,);
+	$enteteFile.=$num_lot_to_imprime_txt.chr(45).$_REQUEST['espece'].chr (45).$qte.PHP_EOL;
+	//echo join("-",$arr);
+	//$enteteFile.=$qte." ".lang('kg').PHP_EOL;
 
 	$name=date('d-m-Y H-i');
 	$fp = fopen ("../data/uploads/".$name.".txt","w+");
@@ -214,6 +233,7 @@ if(isset($_REQUEST['imprime_tout'])){
 	$enteteFile.="التاريخ و الساعة : ".date_format($Date, 'd/m/Y H:i').PHP_EOL;
 
 	$footer = "------------------------------------------".PHP_EOL;
+	$total_lot_for_print = number_format($total_lot_for_print, 3, ',', ' ');
 	$footer .= "المجموع ".$total_lot_for_print." ".lang('kg').PHP_EOL;
 	$footer.= "عدد الدفعات ".$count_lot_for_print.PHP_EOL;
 
