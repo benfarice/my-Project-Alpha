@@ -9,7 +9,9 @@ include "../connect.php";
 $details_lot_txt = "";
 if(isset($_REQUEST['del_lot_id'])){
 	$query_delete = "delete from LOT where Num_lot = '".$_REQUEST['del_lot_id']."'";
+	//echo $query_delete;
 	$result_delete = sqlsrv_query($con,$query_delete) or die(sqlsrv_errors());
+
 }
 
 $num_lot_to_imprime_txt = 'L000000';
@@ -36,7 +38,7 @@ if(isset($_REQUEST['add_lot'])){
 	$options_query_num_lot);
 	while($reader_query_num_lot= sqlsrv_fetch_array($result_query_num_lot, SQLSRV_FETCH_ASSOC)){ 
 		$i = $reader_query_num_lot['nombre'];
-	}
+	} 
 	//$i+=2;
 	
 	$num_lot = 'L00'.$i;
@@ -62,7 +64,7 @@ if(isset($_REQUEST['add_lot'])){
 	$num_lot_to_imprime_txt = $num_lot;
 	$result_add = sqlsrv_query($con,$query_add);
 }
-$query_select = "select l.Num_lot,l.Code_espece,l.Poids_net from LOT l where l.Code_vendeur = '$_REQUEST[id_vendeur]'";
+$query_select = "select l.Num_lot,l.Code_espece,l.Poids_net from LOT l where l.Code_vendeur = '$_REQUEST[id_vendeur]' and etat = 1";
 //echo $query_select;
 
 $params_query_select = array();
@@ -209,7 +211,7 @@ if(isset($_REQUEST['add_lot'])){
 	//echo join("-",$arr);
 	//$enteteFile.=$qte." ".lang('kg').PHP_EOL;
 
-	$name=date('d-m-Y H-i');
+	$name=date('d-m-Y H-i-s');
 	$fp = fopen ("../data/uploads/".$name.".txt","w+");
 	$Imprime = $enteteFile;
 	fputs ($fp,$Imprime);
@@ -237,7 +239,7 @@ if(isset($_REQUEST['imprime_tout'])){
 	$footer .= "المجموع ".$total_lot_for_print." ".lang('kg').PHP_EOL;
 	$footer.= "عدد الدفعات ".$count_lot_for_print.PHP_EOL;
 
-	$name=date('d-m-Y H-i');
+	$name=date('d-m-Y H-i-s');
 	$fp = fopen ("../data/uploads/".$name.".txt","w+");
 	$Imprime = $enteteFile.$details_lot_txt.$footer;
 	fputs ($fp,$Imprime);

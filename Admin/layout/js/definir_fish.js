@@ -26,24 +26,44 @@
             xmlhttp2.send();
             $('#myModal_update_lot').modal('hide');
         }
+      function afficher_lot_after_buy(){
+         var request = "Ajax/get_lot_data.php?id_vendeur="+id_vendeur;
+         console.log('afficher after func');
+         console.log(request);
+          xmlhttp_after = new XMLHttpRequest();
+          xmlhttp_after.onreadystatechange = function(){
+                if(xmlhttp_after.readyState == 4 && xmlhttp_after.status == 200){
+                    document.getElementById('tbody_get_lot_date').innerHTML = xmlhttp_after.responseText;
+                    console.log('yeah after func');
+
+                }
+            }
+            xmlhttp_after.open('GET',request,true);
+            xmlhttp_after.send();
+      } 
       function ajax_func_lot(){
 
         Qte = $("#dialog #input_piece").html();
-        seller_selected = $('#seller_has_selected').html();
+        seller_selected = $('#seller_selected #seller_has_selected').html();
         var add = false;
         var request = "Ajax/get_lot_data.php?id_vendeur="+id_vendeur;
-        if(id_vendeur !=  '0' && code_espece != '0' &&  Qte != '0'){
-          var request = "Ajax/get_lot_data.php?add_lot=yes&id_vendeur="+id_vendeur+"&code_espece="+code_espece+"&qte="+Qte+"&seller="+seller_selected+"&espece="+espece;
-          add=true;
-          code_espece == '0';
-          Qte == '0';
-        }
+        
+            if(id_vendeur !=  '0' && code_espece != '0' &&  Qte != '0'){
+            var request = "Ajax/get_lot_data.php?add_lot=yes&id_vendeur="+id_vendeur+"&code_espece="+code_espece+"&qte="+Qte+"&seller="+seller_selected+"&espece="+espece;
+            add=true;
+            code_espece == '0';
+            Qte == '0';
+          }
+      
+        
         console.log(espece);
+        console.log("ajax func lot :>");
         console.log(request);
             xmlhttp2 = new XMLHttpRequest();
             xmlhttp2.onreadystatechange = function(){
                 if(xmlhttp2.readyState == 4 && xmlhttp2.status == 200){
                     document.getElementById('tbody_get_lot_date').innerHTML = xmlhttp2.responseText;
+                    console.log(xmlhttp2.responseText);
                     if(add == true){
                       var link = $('#link_to_imprim').val();
                       console.log('link : ajax_func-lot() : ');
@@ -57,11 +77,11 @@
             xmlhttp2.send();
             }
 
-
+ 
         function ajax_func_lot_imprim_all(){
 
         Qte = $("#dialog #input_piece").html();
-        seller_selected = $('#seller_has_selected').html();
+        seller_selected = $('#seller_selected #seller_has_selected').html();
         var request = "Ajax/get_lot_data.php?imprime_tout=yes&id_vendeur="+id_vendeur+"&code_espece="+code_espece+"&qte="+Qte+"&seller="+seller_selected;
         
 
@@ -162,28 +182,48 @@
 
         function add_ADJUDICATION_buy(){
 
-        var prix_unitaire = Number($('#price_buy_span').html());
-        var prix_net = Number($('#total_to_buy_span').html());
-        var poids_buy = Number($('#poids_buy_span').html());
+        var prix_unitaire = Number($('#price_buy_span').html()).toFixed(3);
+        var prix_net = Number($('#total_to_buy_span').html()).toFixed(3);
+        var poids_buy = Number($('#poids_buy_span').html()).toFixed(3);
         var lot_to_buy = $('#lot_to_buy_span').html();
+        var seller_to_buy_span =$('#seller_to_buy_span').html();
+        var buyer_to_buy_span = $('#buyer_to_buy_span').html();
+        var type_buy_span = $('#type_buy_span').html();
         xmlhttp_ADJUDICATION = new XMLHttpRequest();
-        alert('yeah');
-        var request = 'Ajax/ajax_ADJUDICATION.php?add=yes&prix_net='+prix_net+'&prix_unitaire='+prix_unitaire+'&poids_buy='+poids_buy+'&lot_to_buy='+lot_to_buy+'&id_buyer='+id_buyer;
+        //alert('yeah');
+        var request = 'Ajax/ajax_ADJUDICATION.php?imprime_buy_nfo=yes&add=yes&prix_net='+prix_net+'&prix_unitaire='+prix_unitaire+'&poids_buy='+poids_buy+'&lot_to_buy='+lot_to_buy+'&id_buyer='+id_buyer+'&seller_to_buy_span='+seller_to_buy_span+'&buyer_to_buy_span='+buyer_to_buy_span+'&type_buy_span='+type_buy_span;
         console.log('add adjudication func');
         console.log(request);
         xmlhttp_ADJUDICATION.onreadystatechange = function(){
             if(xmlhttp_ADJUDICATION.readyState == 4 && xmlhttp_ADJUDICATION.status == 200){
-               // document.getElementById('get_data').innerHTML = xmlhttp_ADJUDICATION.responseText;
+               document.getElementById('get_data_from_ajax_adjudication').innerHTML = xmlhttp_ADJUDICATION.responseText;
+               //link_to_print_buy_info
+              
+                $('#price_buy_span').html("1.000");
+                $('#total_to_buy_span').html("1.000");
+                price_to_buy="0";
+                total_to_buy=0;
+
+               var link = $('#link_to_print_buy_info').val();
+             
+               document.location.href=link;
+
+
+
                console.log(xmlhttp_ADJUDICATION.responseText);
             }
         }
         xmlhttp_ADJUDICATION.open('GET',request,true);
         xmlhttp_ADJUDICATION.send();
-        
+        afficher_lot_after_buy();
         $('#Modal_buy_process').modal('hide');
-        ajax_func_lot();
+        
+        
         }
-
+$('#Modal_buy_process').on('hidden.bs.modal', function () {
+    
+     afficher_lot_after_buy();
+})
         function ajax_func_espece(){
             xmlhttp3 = new XMLHttpRequest();
             //if(id_vendeur != '0'){
@@ -282,6 +322,7 @@
       end_slide_index_e = 11;
       slideIndex_f = 0;
       end_slide_index_f = 11;
+      
       function slider(){
         //slideIndex = 0;
         //end_slide_index = 11;
