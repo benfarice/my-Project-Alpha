@@ -78,17 +78,17 @@
 
 							</svg>
 						</div>
-						<div class="col-md-6 col-sm-6 col-xs-6">
+						<div class="col-md-1 col-sm-1 col-xs-1">
+						</div>
+						<div class="col-md-10 col-sm-10 col-xs-10">
 							<a href="Definition_fish.php">
 							<button class="btn btn-primary btn-block btn-lg categories_buttons">
 								<?php echo lang('intro_fish');?>
 							</button>
 							</a>
 						</div>
-						<div class="col-md-6 col-sm-6 col-xs-6">
-							<button class="btn btn-primary btn-block btn-lg categories_buttons">
-								<?php echo lang('sell_fish');?>
-							</button>
+						<div class="col-md-1 col-sm-1 col-xs-1">
+							
 						</div>
 					</div>
 				</div>

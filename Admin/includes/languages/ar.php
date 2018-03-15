@@ -7,7 +7,7 @@
 			'customize_Profile' => 'إعدادات',
 			'Logout' => 'تسجيل الخروج',
 			'initial_menu' => 'القائمة الرئيسية',
-			'intro_fish' => 'تعريف السمك',
+			'intro_fish' => 'تعريف وبيع السمك',
 			'sell_fish' => 'بيع السمك',
 			'h1_choose_vendeur' => 'إختيار البائع',
 			'step1_next' => 'تابع',

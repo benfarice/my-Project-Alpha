@@ -221,7 +221,10 @@
         
         }
 $('#Modal_buy_process').on('hidden.bs.modal', function () {
-    
+      $('#price_buy_span').html("1.000");
+      $('#total_to_buy_span').html("1.000");
+      price_to_buy="0";
+      total_to_buy=0;
      afficher_lot_after_buy();
 })
         function ajax_func_espece(){
